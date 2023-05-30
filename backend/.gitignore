@@ -1,0 +1,19 @@
+# Direktori
+node_modules/
+dist/
+build/
+out/
+coverage/
+
+# File
+
+*.log
+*.pid
+*.lock
+
+# File sistem
+.DS_Store
+
+# File editor
+*.swp
+*.swo
