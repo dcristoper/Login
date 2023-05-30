@@ -1,0 +1,33 @@
+.wrapper-login {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .container-login {
+    height: 85vh;
+    width: 85vw;
+    border-radius: 1rem;
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 5px 5px 5px rgba(220, 220, 220, 0.274);
+
+    .form-img {
+      width: 50%;
+      display: grid;
+      place-content: center;
+      img {
+        width: 100%;
+      }
+    }
+
+    .form-login {
+      // background-color: aqua;
+      display: flex;
+      justify-content: center;
+      width: 50%;
+    }
+  }
+}
