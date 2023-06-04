@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+@import "./Variable.scss";
 * {
   padding: 0;
   margin: 0;
@@ -6,13 +7,25 @@
   font-family: "Poppins", sans-serif;
 }
 
-.App {
-  .login {
-    background-image: url("./Assets/bgblue.jpeg");
-    background-position: center;
-    background-repeat: none;
-    background-size: cover;
-    height: 100vh;
-    background-color: rgb(44, 44, 44);
+.img-vector {
+  // background-color: aqua;
+  background-image: url(./Assets/vectorcom.jpg);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100%;
+  min-height: 50vh;
+  flex: 0.5;
+}
+.box-form-login-register {
+  flex: 0.5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @include xsmall {
+    flex: 1;
+  }
+  img {
+    width: 90%;
   }
 }

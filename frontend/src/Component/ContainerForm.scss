@@ -1,0 +1,41 @@
+@import "../Variable.scss";
+.wrapper-main {
+  min-height: 100vh;
+  background-image: url("../Assets/bgblue.jpeg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: grid;
+  place-items: center;
+
+  .container-main {
+    background-color: $bgcolor;
+    width: 80%;
+    padding: 15vh 0;
+    border-radius: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    @include xsmall {
+      width: 100%;
+    }
+    @include small {
+      width: 100%;
+    }
+    @include medium {
+      width: 80%;
+      padding: 10vh 0;
+    }
+  }
+  .container-main > *:first-child {
+    @include xsmall {
+      display: none;
+    }
+    @include small {
+      display: none;
+    }
+    @include medium {
+      display: none;
+    }
+  }
+}

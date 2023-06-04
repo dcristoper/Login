@@ -1,21 +1,13 @@
 import User from "../Models/Users.js";
 import sendEmail from "../Utils/sendEmail.js";
+import { sendError, sendToken } from "../Utils/Error.js";
 import crypto from "crypto";
 
 export const register = async (req, res, next) => {
-  const { username, email, password, confPassword } = req.body;
+  const { username, email, password } = req.body;
   const findUser = await User.findOne({ email }).select("+password");
 
   try {
-    // * ==============================
-    // * Check password and confirm password
-    // * ==============================
-    if (password !== confPassword) {
-      return es.status(400).json({
-        success: false,
-        msg: "Your password is not match",
-      });
-    }
     // * ==============================
     // * Check available of email
     // * ==============================
@@ -24,23 +16,19 @@ export const register = async (req, res, next) => {
         success: false,
         msg: "Email is already use",
       });
-    } else {
-      // * ==============================
-      // * Save to database
-      // * ==============================
-      const user = await User.create({
-        username,
-        email,
-        password,
-      });
-
-      sendToken(user, 201, res);
     }
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message,
+    // * ==============================
+    // * Save to database
+    // * ==============================
+    const user = await User.create({
+      username,
+      email,
+      password,
     });
+
+    sendToken(user, 201, res);
+  } catch (error) {
+    return sendError(error, 500, res);
   }
 };
 
@@ -79,10 +67,7 @@ export const login = async (req, res, next) => {
     // * Error
     // * ==============================
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message,
-    });
+    return sendError(error, 500, res);
   }
 };
 
@@ -117,7 +102,7 @@ export const forgotPassword = async (req, res, next) => {
       return res.status(500).json("Email could not be send");
     }
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 export const resetPassword = async (req, res, next) => {
@@ -148,14 +133,6 @@ export const resetPassword = async (req, res, next) => {
       data: "Password Reset Success",
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
-};
-
-const sendToken = async (user, statusCode, res) => {
-  const token = await user.signedToken();
-  res.status(statusCode).json({
-    success: true,
-    token,
-  });
 };

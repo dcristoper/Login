@@ -1,0 +1,39 @@
+$bgcolor: rgb(255, 255, 255);
+$clrError: rgb(255, 98, 98);
+$clrSuccess: rgb(80, 183, 103);
+$baseClrFont: whitesmoke;
+
+@mixin xsmall {
+  @media (max-width: 576px) {
+    @content;
+  }
+}
+@mixin small {
+  @media (min-width: 576px) and (max-width: 767.98px) {
+    @content;
+  }
+}
+
+@mixin medium {
+  @media (min-width: 768px) and (max-width: 991.98px) {
+    @content;
+  }
+}
+
+@mixin large {
+  @media (min-width: 992px) and (max-width: 1199.98px) {
+    @content;
+  }
+}
+
+@mixin xlarge {
+  @media (min-width: 1200px) and (max-width: 1399.98px) {
+    @content;
+  }
+}
+
+@mixin xxlarge {
+  @media (min-width: 1400) {
+    @content;
+  }
+}

@@ -1,19 +1,44 @@
-import "./Login.scss";
-import imgVector from "../../Assets/vectorcom.jpg";
-import FormLogin from "../../Components/FormLogin/FormLogin";
+import { Link } from "react-router-dom";
+import { useState } from "react";
 
+import "./Login.scss";
 function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   return (
-    <div className="wrapper-login">
-      <div className="container-login">
-        <div className="form-img">
-          <img src={imgVector} alt="Vector" />
+    <form className="form-login">
+      <div className="title-login">
+        <p>LOGIN</p>
+      </div>
+      <div className="box-input-login">
+        <div className="email-login input-login">
+          <input type="email" placeholder="Email" required />
         </div>
-        <div className="form-login">
-          <FormLogin />
+        <div className="pass-login input-login">
+          <input type="password" placeholder="Password" required />
+        </div>
+        <div className="forgot">
+          <Link
+            to="/forgotpassword"
+            style={{
+              textDecoration: "none",
+              color: "black",
+            }}
+          >
+            Forgot Password ?
+          </Link>
         </div>
       </div>
-    </div>
+      <div className="box-btn-login">
+        <button type="submit" className="btn-login">
+          Login
+        </button>
+        <Link to="/register" className="signup">
+          Sign Up
+        </Link>
+      </div>
+    </form>
   );
 }
 
