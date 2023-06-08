@@ -6,10 +6,14 @@ import router from "./Routes/index.js";
 import privates from "./Routes/private.js";
 import connectDb from "./Config/ConnectDb.js";
 
+// ? ==============================
+// ? * Initialisation
+// ? ==============================
 dotenv.config();
 connectDb();
 const app = express();
-const Port = process.env.PORT || 4000;
+const Port = process.env.PORT || 5000;
+
 // ? ==============================
 // ? * Middleware
 // ? ==============================
@@ -22,15 +26,10 @@ app.use(
     methods: ["GET", "POST", "PUT"],
   })
 );
-// app.use((req, res, next) => {
-//   req.setHeader("Access-Control-Allow-Origin", "*");
-//   req.setHeader(
-//     "Access-Control-Allow-Methods",
-//     "GET, POST, PUT, PATCH, DELETE, OPTIONS"
-//   );
-//   req.setHeader("Access-Control-Allow-Headers", );
-//   next();
-// });
+
+// ? ==============================
+// ? * Runner Server
+// ? ==============================
 
 app.listen(Port, () =>
   console.log(`Server is running on port ${Port}`.bold.blue)

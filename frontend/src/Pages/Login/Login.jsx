@@ -1,44 +1,107 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./Login.scss";
+import ContainerForm from "../../Component/ContainerForm/ContainerForm";
+import ShowPassword from "../../Component/showPassword/showPassword";
+
 function Login() {
+  // ? local state
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [show, setShow] = useState(false);
+
+  const navigate = useNavigate();
+
+  // ? check token pada local storage
+  // ? jika ada
+  // ? maka user tidak mengakses path login
+
+  useEffect(() => {
+    if (localStorage.getItem("authToken")) {
+      navigate("/");
+    }
+  }, [navigate]);
+
+  // ? ===================
+  // ? tombol untuk login
+  const loginHandler = async (e) => {
+    e.preventDefault();
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      const { data } = await axios.post(
+        "/api/auth/login",
+        { email, password },
+        config
+      );
+      localStorage.setItem("authToken", data.token);
+      navigate("/");
+    } catch (error) {
+      setEmail("");
+      setPassword("");
+      setError(error.response.data.error);
+      setTimeout(() => {
+        setError("");
+      }, 8000);
+    }
+  };
+
   return (
-    <form className="form-login">
-      <div className="title-login">
-        <p>LOGIN</p>
-      </div>
-      <div className="box-input-login">
-        <div className="email-login input-login">
-          <input type="email" placeholder="Email" required />
+    <ContainerForm>
+      <form className="form-login" onSubmit={(e) => loginHandler(e)}>
+        {error && <div>{error}</div>}
+        <div className="title-login">
+          <p>LOGIN</p>
         </div>
-        <div className="pass-login input-login">
-          <input type="password" placeholder="Password" required />
+        <div className="box-input-login">
+          <div className="email-login input-login">
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="pass-login input-login">
+            <input
+              type={show ? "text" : "password"}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <ShowPassword show={show} setShow={setShow} />
+          </div>
+          <div className="forgot">
+            <Link
+              to="/forgotpassword"
+              style={{
+                textDecoration: "none",
+                color: "black",
+              }}
+            >
+              Forgot Password ?
+            </Link>
+          </div>
         </div>
-        <div className="forgot">
-          <Link
-            to="/forgotpassword"
-            style={{
-              textDecoration: "none",
-              color: "black",
-            }}
-          >
-            Forgot Password ?
+        <div className="box-btn-login">
+          <button type="submit" className="btn-login">
+            Login
+          </button>
+          <Link to="/register" className="signup">
+            Sign Up
           </Link>
         </div>
-      </div>
-      <div className="box-btn-login">
-        <button type="submit" className="btn-login">
-          Login
-        </button>
-        <Link to="/register" className="signup">
-          Sign Up
-        </Link>
-      </div>
-    </form>
+      </form>
+    </ContainerForm>
   );
 }
 

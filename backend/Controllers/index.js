@@ -1,6 +1,6 @@
 import User from "../Models/Users.js";
 import sendEmail from "../Utils/sendEmail.js";
-import { sendError, sendToken } from "../Utils/Error.js";
+import { sendError, sendToken } from "../Utils/callBack.js";
 import crypto from "crypto";
 
 export const register = async (req, res, next) => {
@@ -44,6 +44,7 @@ export const login = async (req, res, next) => {
 
   try {
     const user = await User.findOne({ email }).select("+password");
+
     // * ==============================
     // * isNot exist user
     // * ==============================

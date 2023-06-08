@@ -6,26 +6,3 @@
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
 }
-
-.img-vector {
-  // background-color: aqua;
-  background-image: url(./Assets/vectorcom.jpg);
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
-  width: 100%;
-  min-height: 50vh;
-  flex: 0.5;
-}
-.box-form-login-register {
-  flex: 0.5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  @include xsmall {
-    flex: 1;
-  }
-  img {
-    width: 90%;
-  }
-}

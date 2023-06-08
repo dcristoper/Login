@@ -16,15 +16,7 @@
     padding: 0 1rem;
     width: initial;
   }
-  .success-register {
-    background-color: $clrSuccess;
-    color: $baseClrFont;
-    font-weight: 400;
-    text-align: center;
-    padding: 0.5rem 4rem;
-    font-size: 1.5rem;
-    width: 100%;
-  }
+
   .error-register {
     background-color: $clrError;
     color: $baseClrFont;
@@ -42,7 +34,6 @@
   }
 
   .box-input-register {
-    // background-color: antiquewhite;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -51,15 +42,20 @@
     input {
       box-shadow: 5px 5px 5px whitesmoke;
       width: 100%;
-      padding: 0.4rem 1rem;
+      padding: 0.7rem 1rem;
       font-size: 1rem;
       outline: none;
       border: 1px solid rgb(221, 221, 221);
+      border-radius: 0.5em;
+    }
+
+    .pass-register,
+    .confPass-register {
+      position: relative;
     }
   }
 
   .box-btn-register {
-    // background-color: rgb(20, 92, 68);
     width: 100%;
     margin: 2rem;
     display: flex;

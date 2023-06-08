@@ -1,114 +1,166 @@
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import ContainerForm from "../../Component/ContainerForm/ContainerForm";
+import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import Swal from "sweetalert2";
 import axios from "axios";
 import "./Register.scss";
+import { registerState } from "./state";
 function Register() {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confPassword, setConfPassword] = useState("");
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [data, setData] = useState(registerState);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem("authToken")) {
+      navigate("/");
+    }
+  }, [navigate]);
 
   const registerHandler = async (e) => {
     e.preventDefault();
-    const config = {
-      header: {
-        "Content-Type": "application/json",
-      },
-    };
-    if (password !== confPassword) {
-      setPassword("");
-      setConfPassword("");
-      setTimeout(() => {
-        setError("");
-      }, 5000);
-      return setError("Password does not match \n please try again");
+    const { username, email, password, confPassword } = data;
+    if (password.payload !== confPassword.payload) {
+      setData((prevData) => ({
+        ...prevData,
+        password: {
+          ...prevData.password,
+          payload: "",
+        },
+      }));
+      setData((prevData) => ({
+        ...prevData,
+        confPassword: {
+          ...prevData.confPassword,
+          payload: "",
+        },
+      }));
     }
+
     try {
-      const { data } = await axios.post(
+      const payloadUsername = username.payload;
+      const payloadEmail = email.payload;
+      const payloadPassword = password.payload;
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      await axios.post(
         "/api/auth/register",
-        { username, email, password },
+        {
+          username: payloadUsername,
+          email: payloadEmail,
+          password: payloadPassword,
+        },
         config
       );
-      localStorage.setItem("authTOken", data.token);
-      setSuccess("Success");
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        iconColor: "rgb(3, 43, 113)",
+        title: "You have registered",
+        showConfirmButton: true,
+        confirmButtonText: "Login",
+      })
+        .then((ok) => {
+          if (ok.isConfirmed) {
+            navigate("/login");
+          }
+        })
+        .catch((err) => console.log(err));
     } catch (error) {
-      console.log(error);
-      setEmail("");
-      setConfPassword("");
-      setPassword("");
-      setError(error.response.data.error);
-      setTimeout(() => {
-        setError("");
-      }, 8000);
+      console.log(error.response.data);
     }
   };
 
   return (
-    <form className="form-register" onSubmit={registerHandler}>
-      {success && (
-        <div className="success-register">
-          <p>{success}</p>
+    <ContainerForm>
+      <form className="form-register" onSubmit={(e) => registerHandler(e)}>
+        <div className="title-register">
+          <p>REGISTER</p>
         </div>
-      )}
-      {error && (
-        <div className="error-register">
-          <p>{error}</p>
+        <div className="box-input-register">
+          <div className="user-register input-register">
+            <input
+              type="text"
+              placeholder="Username"
+              id="name"
+              value={data.username.payload}
+              onChange={(e) =>
+                setData((prevData) => ({
+                  ...prevData,
+                  username: {
+                    ...prevData.username,
+                    payload: e.target.value,
+                  },
+                }))
+              }
+            />
+          </div>
+          <div className="email-register input-register">
+            <input
+              type="email"
+              placeholder="Email"
+              id="email"
+              value={data.email.payload}
+              onChange={(e) =>
+                setData((prevData) => ({
+                  ...prevData,
+                  email: {
+                    ...prevData.email,
+                    payload: e.target.value,
+                  },
+                }))
+              }
+            />
+          </div>
+          <div className="pass-register input-register">
+            <input
+              type="password"
+              placeholder="Password"
+              id="pasword"
+              required
+              value={data.password.payload}
+              onChange={(e) =>
+                setData((prevData) => ({
+                  ...prevData,
+                  password: {
+                    ...prevData.password,
+                    payload: e.target.value,
+                  },
+                }))
+              }
+            />
+          </div>
+          <div className="confPass-register input-register">
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              id="confPassword"
+              required
+              value={data.confPassword.payload}
+              onChange={(e) =>
+                setData((prevData) => ({
+                  ...prevData,
+                  confPassword: {
+                    ...prevData.confPassword,
+                    payload: e.target.value,
+                  },
+                }))
+              }
+            />
+          </div>
         </div>
-      )}
-      <div className="title-register">
-        <p>REGISTER</p>
-      </div>
-      <div className="box-input-register">
-        <div className="user-register input-register">
-          <input
-            type="text"
-            placeholder="Username"
-            id="name"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
+        <div className="box-btn-register">
+          <button type="submit" className="btn-register">
+            Submit
+          </button>
+          <p>
+            Already have an account ? <Link to="/login">Login</Link>
+          </p>
         </div>
-        <div className="email-register input-register">
-          <input
-            type="email"
-            placeholder="Email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div className="pass-register input-register">
-          <input
-            type="password"
-            placeholder="Password"
-            id="pasword"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <div className="confPass-register input-register">
-          <input
-            type="password"
-            placeholder="Confirm Password"
-            id="confPassword"
-            required
-            value={confPassword}
-            onChange={(e) => setConfPassword(e.target.value)}
-          />
-        </div>
-      </div>
-      <div className="box-btn-register">
-        <button type="submit" className="btn-register">
-          Submit
-        </button>
-        <p>
-          Already have an account ? <Link to="/login">Login</Link>
-        </p>
-      </div>
-    </form>
+      </form>
+    </ContainerForm>
   );
 }
 
