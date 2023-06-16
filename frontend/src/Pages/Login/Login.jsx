@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import axios from "axios";
 import "./Login.scss";
 import ContainerForm from "../../Component/ContainerForm/ContainerForm";
@@ -44,19 +45,20 @@ function Login() {
       localStorage.setItem("authToken", data.token);
       navigate("/");
     } catch (error) {
-      setEmail("");
+      console.log(error.response.data.error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: error.response.data.error,
+        footer: '<a href="">Why do I have this issue?</a>',
+      });
       setPassword("");
-      setError(error.response.data.error);
-      setTimeout(() => {
-        setError("");
-      }, 8000);
     }
   };
 
   return (
     <ContainerForm>
       <form className="form-login" onSubmit={(e) => loginHandler(e)}>
-        {error && <div>{error}</div>}
         <div className="title-login">
           <p>LOGIN</p>
         </div>

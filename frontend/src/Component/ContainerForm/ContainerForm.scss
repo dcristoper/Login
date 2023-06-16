@@ -7,20 +7,20 @@
   background-repeat: no-repeat;
   display: grid;
   place-items: center;
-
+  user-select: none;
   .container-main {
+    min-height: 80vh;
     background-color: $bgcolor;
     width: 80%;
-    padding: 15vh 0;
     border-radius: 1rem;
     display: flex;
     justify-content: center;
     align-items: center;
     @include xsmall {
-      width: 100%;
+      width: 70%;
     }
     @include small {
-      width: 100%;
+      width: 70%;
     }
     @include medium {
       width: 80%;
@@ -35,18 +35,15 @@
     background-repeat: no-repeat;
     width: 100%;
     min-height: 50vh;
-    flex: 0.5;
+    flex: 1;
   }
   .box-form-login-register {
-    flex: 0.5;
+    flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
     @include xsmall {
       flex: 1;
-    }
-    img {
-      width: 90%;
     }
   }
   .container-main > *:first-child {

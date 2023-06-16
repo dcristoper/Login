@@ -4,9 +4,14 @@ import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import axios from "axios";
 import "./Register.scss";
-import { registerState } from "./state";
+import FormInput from "../../Component/Inputs/FormInput";
 function Register() {
-  const [data, setData] = useState(registerState);
+  const [values, setValues] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
 
   const navigate = useNavigate();
 
@@ -16,44 +21,75 @@ function Register() {
     }
   }, [navigate]);
 
+  const inputs = [
+    {
+      id: 1,
+      name: "username",
+      type: "text",
+      placeholder: "Username",
+      errmsg:
+        "Username should be 3-16 characters and shouldn't include any special character!",
+      label: "Username",
+      pattern: "^[A-Za-z0-9]{3,16}$",
+      required: true,
+    },
+    {
+      id: 2,
+      name: "email",
+      type: "email",
+      placeholder: "Email",
+      errmsg: "It should be a valid email address!",
+      label: "Email",
+      pattern:
+        "/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,}(?:.[A-Za-z]{2,})?$/",
+      required: true,
+    },
+
+    {
+      id: 3,
+      name: "password",
+      type: "password",
+      placeholder: "Password",
+      errmsg:
+        "Password should be 6-20 characters and include at least 1 letter, 1 number and 1 special character!",
+      label: "Password",
+      pattern: `^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$`,
+      title: "Silahkan Isi dengan benar",
+
+      required: true,
+    },
+    {
+      id: 4,
+      name: "confirmPassword",
+      type: "password",
+      placeholder: "Confirm Password",
+      errmsg: "Passwords don't match!",
+      label: "Confirm Password",
+      pattern: values.password,
+      required: true,
+    },
+  ];
+
   const registerHandler = async (e) => {
     e.preventDefault();
-    const { username, email, password, confPassword } = data;
-    if (password.payload !== confPassword.payload) {
-      setData((prevData) => ({
-        ...prevData,
-        password: {
-          ...prevData.password,
-          payload: "",
-        },
-      }));
-      setData((prevData) => ({
-        ...prevData,
-        confPassword: {
-          ...prevData.confPassword,
-          payload: "",
-        },
-      }));
-    }
+
+    const { username, email, password } = values;
+    const URL = "/api/auth/register";
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
 
     try {
-      const payloadUsername = username.payload;
-      const payloadEmail = email.payload;
-      const payloadPassword = password.payload;
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-      await axios.post(
-        "/api/auth/register",
-        {
-          username: payloadUsername,
-          email: payloadEmail,
-          password: payloadPassword,
-        },
+      const { data } = await axios.post(
+        URL,
+        { username, email, password },
         config
       );
+      if (!data) {
+        console.log("Failed");
+      }
       Swal.fire({
         position: "center",
         icon: "success",
@@ -68,88 +104,30 @@ function Register() {
           }
         })
         .catch((err) => console.log(err));
-    } catch (error) {
-      console.log(error.response.data);
+    } catch (e) {
+      console.log(e);
     }
   };
 
+  const onChange = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value });
+  };
   return (
     <ContainerForm>
       <form className="form-register" onSubmit={(e) => registerHandler(e)}>
         <div className="title-register">
           <p>REGISTER</p>
         </div>
+
         <div className="box-input-register">
-          <div className="user-register input-register">
-            <input
-              type="text"
-              placeholder="Username"
-              id="name"
-              value={data.username.payload}
-              onChange={(e) =>
-                setData((prevData) => ({
-                  ...prevData,
-                  username: {
-                    ...prevData.username,
-                    payload: e.target.value,
-                  },
-                }))
-              }
+          {inputs.map((el, i) => (
+            <FormInput
+              key={i}
+              {...el}
+              value={values[el.name]}
+              onChange={onChange}
             />
-          </div>
-          <div className="email-register input-register">
-            <input
-              type="email"
-              placeholder="Email"
-              id="email"
-              value={data.email.payload}
-              onChange={(e) =>
-                setData((prevData) => ({
-                  ...prevData,
-                  email: {
-                    ...prevData.email,
-                    payload: e.target.value,
-                  },
-                }))
-              }
-            />
-          </div>
-          <div className="pass-register input-register">
-            <input
-              type="password"
-              placeholder="Password"
-              id="pasword"
-              required
-              value={data.password.payload}
-              onChange={(e) =>
-                setData((prevData) => ({
-                  ...prevData,
-                  password: {
-                    ...prevData.password,
-                    payload: e.target.value,
-                  },
-                }))
-              }
-            />
-          </div>
-          <div className="confPass-register input-register">
-            <input
-              type="password"
-              placeholder="Confirm Password"
-              id="confPassword"
-              required
-              value={data.confPassword.payload}
-              onChange={(e) =>
-                setData((prevData) => ({
-                  ...prevData,
-                  confPassword: {
-                    ...prevData.confPassword,
-                    payload: e.target.value,
-                  },
-                }))
-              }
-            />
-          </div>
+          ))}
         </div>
         <div className="box-btn-register">
           <button type="submit" className="btn-register">

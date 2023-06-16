@@ -49,9 +49,10 @@ export const login = async (req, res, next) => {
     // * isNot exist user
     // * ==============================
     if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, error: "User is not found" });
+      return res.status(404).json({
+        success: false,
+        error: "User is not found or please registered",
+      });
     }
 
     const isMatch = await user.matchPassword(password);

@@ -1,0 +1,31 @@
+.asd {
+  // background-color: aqua;
+  width: 100%;
+  input {
+    box-shadow: 5px 5px 5px whitesmoke;
+    padding: 0.7rem 1rem;
+    font-size: 1rem;
+    outline: none;
+    border: 1px solid rgb(221, 221, 221);
+    border-radius: 0.5em;
+    width: 100%;
+    // margin: 0.4em 0;
+  }
+  .err {
+    padding: 0.6em 0.3rem;
+    span {
+      font-size: 0.8rem;
+      overflow-wrap: break-word;
+      color: red;
+      display: none;
+    }
+  }
+}
+
+input:invalid[focused="true"] {
+  border: 1px solid red;
+}
+
+input:invalid[focused="true"] ~ .err > span {
+  display: block;
+}
