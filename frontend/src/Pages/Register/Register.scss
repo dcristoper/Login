@@ -1,63 +1,36 @@
 @import "../../Variable.scss";
-.form-register {
+
+.box-input-register {
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  width: 50%;
-  @include xsmall {
-    padding: 0 1rem;
-    width: 100%;
-  }
-  @include small {
-    width: 80%;
-    padding: 0 1rem;
-  }
-  @include medium {
-    padding: 0 1rem;
-    width: 60%;
-  }
+  margin-top: 3rem;
+  // background-color: rgb(53, 41, 25);
+}
 
-  .box-input-register {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    // background-color: rgb(53, 41, 25);
+.box-btn-register {
+  width: 100%;
+  margin: 2rem;
+  display: flex;
+  flex-direction: column;
+  .btn-register {
+    margin-bottom: 1em;
   }
-
-  .title-register {
-    width: 100%;
-    text-align: center;
-    font-size: calc(1rem + 3vw);
-    font-weight: 600;
-    color: rgb(3, 43, 113);
-    padding: 2rem 0;
+  button {
+    border: none;
+    cursor: pointer;
+    padding: 0.3rem;
+    border-radius: 0.3em;
+    font-size: 1rem;
+    font-weight: 500;
+    outline: none;
+    background-color: rgb(3, 43, 113);
+    box-shadow: 2px 2px 2px 2px rgb(240, 240, 255);
+    color: white;
   }
-
-  .box-btn-register {
-    width: 100%;
-    margin: 2rem;
-    display: flex;
-    flex-direction: column;
-    .btn-register {
-      margin-bottom: 1em;
-    }
-    button {
-      border: none;
-      cursor: pointer;
-      padding: 0.3rem;
-      border-radius: 0.3em;
-      font-size: 1rem;
-      font-weight: 500;
-      outline: none;
-      background-color: rgb(3, 43, 113);
-      box-shadow: 2px 2px 2px 2px rgb(240, 240, 255);
-      color: white;
-    }
-    p {
-      font-size: calc(1rem - 2rem);
-    }
+  p {
+    font-size: calc(1rem - 2rem);
   }
 }

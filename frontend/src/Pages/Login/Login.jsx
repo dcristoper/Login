@@ -2,16 +2,17 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import axios from "axios";
 import "./Login.scss";
 import ContainerForm from "../../Component/ContainerForm/ContainerForm";
 import ShowPassword from "../../Component/showPassword/showPassword";
+import { ReqUser } from "../../API/ApiReq";
+import Form from "../../Component/Form/Form";
+import Title from "../../Component/Title/Title";
 
 function Login() {
   // ? local state
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const [show, setShow] = useState(false);
 
   const navigate = useNavigate();
@@ -32,16 +33,7 @@ function Login() {
     e.preventDefault();
 
     try {
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-      const { data } = await axios.post(
-        "/api/auth/login",
-        { email, password },
-        config
-      );
+      const { data } = await ReqUser("login", { email, password });
       localStorage.setItem("authToken", data.token);
       navigate("/");
     } catch (error) {
@@ -50,7 +42,6 @@ function Login() {
         icon: "error",
         title: "Oops...",
         text: error.response.data.error,
-        footer: '<a href="">Why do I have this issue?</a>',
       });
       setPassword("");
     }
@@ -58,10 +49,9 @@ function Login() {
 
   return (
     <ContainerForm>
-      <form className="form-login" onSubmit={(e) => loginHandler(e)}>
-        <div className="title-login">
-          <p>LOGIN</p>
-        </div>
+      <Form submit={loginHandler}>
+        <Title txt="Login" />
+
         <div className="box-input-login">
           <div className="email-login input-login">
             <input
@@ -102,7 +92,7 @@ function Login() {
             Sign Up
           </Link>
         </div>
-      </form>
+      </Form>
     </ContainerForm>
   );
 }

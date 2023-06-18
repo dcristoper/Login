@@ -107,24 +107,49 @@ export const forgotPassword = async (req, res, next) => {
     return next(error);
   }
 };
-export const resetPassword = async (req, res, next) => {
+
+export const validReset = async () => {
   const resetPasswordToken = crypto
     .createHash("sha256")
     .update(req.params.resetToken)
     .digest("hex");
+
   try {
     const user = await User.findOne({
       resetPasswordToken,
       resetPasswordExpire: { $gt: Date.now() },
     });
-
     if (!user) {
       return res.status(400).json({
         status: false,
-        msg: "Invalid Reset Token",
+        msg: "Link has expired",
       });
     }
+    return res.status(400).json({
+      status: true,
+      msg: "You got access to reset password",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const resetPassword = async (req, res, next) => {
+  const resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(req.params.resetToken)
+    .digest("hex");
 
+  try {
+    const user = await User.findOne({
+      resetPasswordToken,
+      resetPasswordExpire: { $gt: Date.now() },
+    });
+    if (!user) {
+      return res.status(400).json({
+        status: false,
+        msg: "Link sudah kadaluarsa",
+      });
+    }
     user.password = req.body.password;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;
@@ -132,7 +157,7 @@ export const resetPassword = async (req, res, next) => {
 
     res.status(201).json({
       success: true,
-      data: "Password Reset Success",
+      msg: "Password Reset Success",
     });
   } catch (error) {
     return next(error);

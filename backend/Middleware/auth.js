@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import User from "../Models/Users.js";
+import crypto from "crypto";
 
 export const protect = async (req, res, next) => {
   let token;
@@ -15,10 +16,10 @@ export const protect = async (req, res, next) => {
       msg: "Not authorized to access this route",
     });
   }
-  try {
-    const decode = await jwt.verify(token, process.env.SECRET_TOKEN);
 
-    const user = await User.findById(decode.id);
+  jwt.verify(token, process.env.SECRET_TOKEN, (err, decode) => {
+    if (err) res.status(404).json("Not authorized to access this route");
+    const user = decode.id;
     if (!user) {
       return res.status(404).json({
         msg: "Not user found with this id",
@@ -26,9 +27,5 @@ export const protect = async (req, res, next) => {
     }
     req.user = user;
     next();
-  } catch (error) {
-    return res.status(401).json({
-      msg: "Not authorized to access this route",
-    });
-  }
+  });
 };

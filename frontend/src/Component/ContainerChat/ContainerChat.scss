@@ -1,0 +1,38 @@
+.container-chat {
+  width: 83vw;
+  height: 95vh;
+  background-color: rgb(15, 53, 53);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: whitesmoke;
+  display: grid;
+  grid-template-columns: 0.85fr 2fr;
+  .left-view {
+    display: grid;
+    grid-template-rows: 0.25fr 0.2fr 3fr;
+    .box-menu {
+      // background-color: aqua;
+    }
+    .box-search {
+      // background-color: rgb(32, 52, 52);
+    }
+    .box-chat {
+      // background-color: rgb(23, 36, 36);
+    }
+  }
+  .right-view {
+    display: grid;
+    grid-template-rows: 0.25fr 3fr 0.25fr;
+    .profile-receiver {
+      // background-color: aqua;
+    }
+    .contain-chat {
+      // background-color: rgb(92, 19, 156);
+    }
+    .box-text-chat {
+      // background-color: rgb(20, 5, 33);
+    }
+  }
+}

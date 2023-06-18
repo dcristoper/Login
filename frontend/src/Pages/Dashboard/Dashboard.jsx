@@ -1,12 +1,22 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "./Dashboard.scss";
+import ContainerChat from "../../Component/ContainerChat/ContainerChat";
 
 function Private() {
   const [error, setError] = useState("");
-  const [privateData, setPrivateData] = useState("");
   const [username, setUsername] = useState("");
   const navigate = useNavigate();
+  function capitalizeString(data) {
+    let words = data.split(" ");
+    let capitalizedWords = words.map((word) => {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    });
+    let capitalizeddata = capitalizedWords.join(" ");
+    return capitalizeddata;
+  }
+
   useEffect(() => {
     if (!localStorage.getItem("authToken")) {
       navigate("/login");
@@ -21,8 +31,8 @@ function Private() {
 
       try {
         const { data } = await axios.get("/api/private", config);
-        setUsername(data.username);
-        setPrivateData(data.msg);
+        const capitalName = await capitalizeString(data.username);
+        setUsername(capitalName);
       } catch (error) {
         localStorage.removeItem("authToken");
         setError("You are not authorized, please login");
@@ -31,20 +41,12 @@ function Private() {
     fetchPrivate();
   }, [navigate]);
 
-  const logout = () => {
-    localStorage.removeItem("authToken");
-    navigate("/login");
-  };
-
-  return error ? (
-    <span>{error}</span>
-  ) : (
-    <>
-      {" "}
-      <div className="hei">{privateData}</div>{" "}
-      <button onClick={logout}>Log out</button>
-      <p>Hallo {username}</p>
-    </>
+  return (
+    <div className="Wrapper-dashboard">
+      {error && <span>{error}</span>}
+      <div className="bg-header"> </div>
+      <ContainerChat username={username} />
+    </div>
   );
 }
 

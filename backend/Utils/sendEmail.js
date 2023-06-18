@@ -16,7 +16,7 @@ const sendEmail = async (options) => {
     html: `
     <h1>You have requested a password rest</h1>
     <p>Please go to this link to reset your password</p>
-    <a href=http://localhost:3001/passwordreset/${resetToken} clicktracking=off>http://localhost:3000/passwordreset/${resetToken}</a>
+    <a href=http://localhost:3000/resetpassword/${resetToken} clicktracking=off>Link</a>
   `,
   };
   transporter.sendMail(mailOpt, (err, info) => {

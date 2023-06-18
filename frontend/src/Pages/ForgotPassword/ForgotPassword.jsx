@@ -1,31 +1,55 @@
 import { useState } from "react";
-import axios from "axios";
 import ContainerForm from "../../Component/ContainerForm/ContainerForm";
 import "./ForgotPassword.scss";
+import { ReqUser } from "../../API/ApiReq";
+import Swal from "sweetalert2";
+import { Link, useNavigate } from "react-router-dom";
+import Form from "../../Component/Form/Form";
+import Titile from "../../Component/Title/Title";
+
 function ForgotPassword() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const handleForgot = async (e) => {
     e.preventDefault();
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
     try {
-      await axios.post("/api/auth/forgotpassword", { email }, config);
+      const { data } = await ReqUser("forgotpassword", { email });
+      if (data) {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Email Sent",
+          showConfirmButton: false,
+          timer: 2000,
+        }).then(() => navigate("/login"));
+      }
     } catch (error) {
-      console.log(error);
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        iconColor: "rgb(255, 87, 87)",
+        title: "Email could not be sent",
+        text: "Please provide valid email that you have registered",
+        showConfirmButton: true,
+        confirmButtonText: "Ok",
+      })
+        .then((ok) => {
+          if (ok.isConfirmed) {
+            setEmail("");
+          }
+        })
+        .catch((err) => console.log(err));
     }
   };
 
   return (
     <ContainerForm>
-      <form className="form-forgot" onSubmit={(e) => handleForgot(e)}>
-        <div className="title-forgot">
-          <h2>Forgot Password </h2>
+      <Form submit={handleForgot}>
+        <Titile txt="Forgot Password" />
+        <div className="desc">
           <p>
             Please enter your email you used at the time registration to get the
-            password reset instructions{" "}
+            password reset instructions
           </p>
         </div>
         <div className="box-form-forgot">
@@ -38,8 +62,13 @@ function ForgotPassword() {
         </div>
         <div className="btn-forgot">
           <button type="submit">Send</button>
+          <div className="btn-back-forgot">
+            <Link to="/login" style={{ textDecoration: "none" }}>
+              Back
+            </Link>
+          </div>
         </div>
-      </form>
+      </Form>
     </ContainerForm>
   );
 }

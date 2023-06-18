@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./FormInput.scss";
 function FormInput(props) {
   const [focused, setFocused] = useState(false);
-  const { label, errmsg, onChange, id, title, ...inputProps } = props;
+  const { label, errmsg, onChange, title, ...inputProps } = props;
 
   const handleFocus = (e) => {
     setFocused(true);

@@ -5,7 +5,7 @@ import Register from "./Pages/Register/Register";
 import ResetPassword from "./Pages/ResetPassword/ResetPassword";
 import ForgotPassword from "./Pages/ForgotPassword/ForgotPassword";
 import PrivateRoute from "./PrivateRoute/PrivateRoute";
-import Private from "./Pages/Private/Private";
+import Dashboard from "./Pages/Dashboard/Dashboard";
 
 // prettier-ignore
 function App() {
@@ -16,7 +16,7 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<PrivateRoute />}>
-            <Route path="/" element={<Private/>}/>
+            <Route path="/" element={<Dashboard />}/>
           </Route>
           <Route exact path="/login" element={<Login/>} />
           <Route exact path="/register" element={<Register/>} />

@@ -4,7 +4,8 @@ import {
   login,
   forgotPassword,
   resetPassword,
-} from "../Controllers/index.js";
+} from "../Controllers/User.js";
+
 const router = express.Router();
 
 router.route("/register").post(register);

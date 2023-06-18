@@ -2,9 +2,12 @@ import ContainerForm from "../../Component/ContainerForm/ContainerForm";
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
-import axios from "axios";
 import "./Register.scss";
 import FormInput from "../../Component/Inputs/FormInput";
+import { ReqUser } from "../../API/ApiReq";
+import Form from "../../Component/Form/Form";
+import Title from "../../Component/Title/Title";
+
 function Register() {
   const [values, setValues] = useState({
     username: "",
@@ -74,19 +77,9 @@ function Register() {
     e.preventDefault();
 
     const { username, email, password } = values;
-    const URL = "/api/auth/register";
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
 
     try {
-      const { data } = await axios.post(
-        URL,
-        { username, email, password },
-        config
-      );
+      const { data } = await ReqUser("register", { username, email, password });
       if (!data) {
         console.log("Failed");
       }
@@ -114,10 +107,8 @@ function Register() {
   };
   return (
     <ContainerForm>
-      <form className="form-register" onSubmit={(e) => registerHandler(e)}>
-        <div className="title-register">
-          <p>REGISTER</p>
-        </div>
+      <Form submit={registerHandler}>
+        <Title txt="Register" />
 
         <div className="box-input-register">
           {inputs.map((el, i) => (
@@ -137,7 +128,7 @@ function Register() {
             Already have an account ? <Link to="/login">Login</Link>
           </p>
         </div>
-      </form>
+      </Form>
     </ContainerForm>
   );
 }
