@@ -32,7 +32,7 @@ export const register = async (req, res, next) => {
   }
 };
 
-export const login = async (req, res, next) => {
+export const login = async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -108,7 +108,7 @@ export const forgotPassword = async (req, res, next) => {
   }
 };
 
-export const validReset = async () => {
+export const validReset = async (req, res) => {
   const resetPasswordToken = crypto
     .createHash("sha256")
     .update(req.params.resetToken)
@@ -125,12 +125,15 @@ export const validReset = async () => {
         msg: "Link has expired",
       });
     }
-    return res.status(400).json({
+    return res.status(200).json({
       status: true,
       msg: "You got access to reset password",
     });
   } catch (error) {
-    console.log(error);
+    res.status(404).json({
+      status: false,
+      msg: error,
+    });
   }
 };
 export const resetPassword = async (req, res, next) => {
@@ -144,12 +147,7 @@ export const resetPassword = async (req, res, next) => {
       resetPasswordToken,
       resetPasswordExpire: { $gt: Date.now() },
     });
-    if (!user) {
-      return res.status(400).json({
-        status: false,
-        msg: "Link sudah kadaluarsa",
-      });
-    }
+
     user.password = req.body.password;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;

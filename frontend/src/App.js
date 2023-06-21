@@ -6,6 +6,7 @@ import ResetPassword from "./Pages/ResetPassword/ResetPassword";
 import ForgotPassword from "./Pages/ForgotPassword/ForgotPassword";
 import PrivateRoute from "./PrivateRoute/PrivateRoute";
 import Dashboard from "./Pages/Dashboard/Dashboard";
+import NotFound from "./Pages/NotFound/NotFound";
 
 // prettier-ignore
 function App() {
@@ -22,6 +23,7 @@ function App() {
           <Route exact path="/register" element={<Register/>} />
           <Route exact path="/forgotpassword" element={<ForgotPassword/>}/>
           <Route exact path="/resetpassword/:resetToken" element={<ResetPassword/>}/>
+          <Route exact path="*" element={<NotFound/>}/>
         </Routes>
       </div>
     </Router>

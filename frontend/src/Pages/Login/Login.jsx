@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import "./Login.scss";
 import ContainerForm from "../../Component/ContainerForm/ContainerForm";
 import ShowPassword from "../../Component/showPassword/showPassword";
-import { ReqUser } from "../../API/ApiReq";
+import { getDataApi } from "../../API/ApiReq";
 import Form from "../../Component/Form/Form";
 import Title from "../../Component/Title/Title";
 
@@ -33,15 +33,22 @@ function Login() {
     e.preventDefault();
 
     try {
-      const { data } = await ReqUser("login", { email, password });
-      localStorage.setItem("authToken", data.token);
-      navigate("/");
+      const config = {
+        endpoint: "/login",
+        payload: { email, password },
+      };
+      const { data } = await getDataApi(config);
+      if (data && data.token) {
+        localStorage.setItem("authToken", data.token);
+        navigate("/");
+      }
+      console.log(data);
     } catch (error) {
-      console.log(error.response.data.error);
+      navigate("/login");
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: error.response.data.error,
+        text: error.response?.data.error,
       });
       setPassword("");
     }

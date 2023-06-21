@@ -21,7 +21,7 @@ const Port = process.env.PORT || 5000;
 // ? ==============================
 app.use(express.json());
 app.use("/api/auth", UserRouter);
-app.use("/api/private", privates);
+app.use("/api/auth/private", privates);
 app.use("/api/user", ChatRouter);
 app.use("/api/message", MessageRouter);
 app.use(

@@ -1,21 +1,46 @@
 import axios from "axios";
 
-const config = {
-  headers: {
+function newAbortSignal(timeoutMs) {
+  const abortController = new AbortController();
+  setTimeout(() => abortController.abort(), timeoutMs || 0);
+
+  return abortController.signal;
+}
+
+export const getDataApi = async (config) => {
+  const { method = "POST", endpoint, payload } = config;
+  const headers = {
     "Content-Type": "application/json",
-  },
-};
-export const ReqUser = (enpoint, payload) => {
+  };
+
   try {
-    return axios.post(`/api/auth/${enpoint}`, payload, config);
+    const url = `/api/auth${endpoint}`;
+    return await axios({
+      method,
+      url,
+      headers,
+      data: payload,
+      signal: newAbortSignal(5000),
+    });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
-export const reqReset = (enpoint, payload) => {
+export const getDataPrivate = async (config, token) => {
+  const { method, endpoint } = config;
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+  };
   try {
-    return axios.put(`/api/auth/resetpassword/${enpoint}`, payload, config);
+    const url = `/api/auth${endpoint}`;
+    return await axios({
+      method: method,
+      url: url,
+      headers: headers,
+      signal: newAbortSignal(5000),
+    });
   } catch (error) {
     console.log(error);
   }

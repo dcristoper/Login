@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ContainerForm from "../../Component/ContainerForm/ContainerForm";
 import "./ForgotPassword.scss";
-import { ReqUser } from "../../API/ApiReq";
+import { getDataApi } from "../../API/ApiReq";
 import Swal from "sweetalert2";
 import { Link, useNavigate } from "react-router-dom";
 import Form from "../../Component/Form/Form";
@@ -13,7 +13,11 @@ function ForgotPassword() {
   const handleForgot = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await ReqUser("forgotpassword", { email });
+      const config = {
+        endpoint: "/forgotpassword",
+        payload: { email },
+      };
+      const { data } = await getDataApi(config);
       if (data) {
         Swal.fire({
           position: "center",
@@ -24,6 +28,7 @@ function ForgotPassword() {
         }).then(() => navigate("/login"));
       }
     } catch (error) {
+      console.log(error);
       Swal.fire({
         position: "center",
         icon: "error",
@@ -32,13 +37,12 @@ function ForgotPassword() {
         text: "Please provide valid email that you have registered",
         showConfirmButton: true,
         confirmButtonText: "Ok",
-      })
-        .then((ok) => {
-          if (ok.isConfirmed) {
-            setEmail("");
-          }
-        })
-        .catch((err) => console.log(err));
+      }).then((ok) => {
+        if (ok.isConfirmed) {
+          setEmail("");
+        }
+      });
+      console.error(error.response.data);
     }
   };
 

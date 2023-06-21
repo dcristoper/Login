@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import "./Register.scss";
 import FormInput from "../../Component/Inputs/FormInput";
-import { ReqUser } from "../../API/ApiReq";
+import { getDataApi } from "../../API/ApiReq";
 import Form from "../../Component/Form/Form";
 import Title from "../../Component/Title/Title";
 
@@ -79,7 +79,11 @@ function Register() {
     const { username, email, password } = values;
 
     try {
-      const { data } = await ReqUser("register", { username, email, password });
+      const config = {
+        endpoint: "/register",
+        payload: { username, email, password },
+      };
+      const { data } = await getDataApi(config);
       if (!data) {
         console.log("Failed");
       }

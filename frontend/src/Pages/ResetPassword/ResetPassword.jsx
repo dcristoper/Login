@@ -1,28 +1,50 @@
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { useNavigate, useParams } from "react-router-dom";
-import jwt_decode from "jwt-decode";
 import ContainerForm from "../../Component/ContainerForm/ContainerForm";
 import Form from "../../Component/Form/Form";
 import "./ResetPassword.scss";
-import { reqReset } from "../../API/ApiReq";
+import { getDataApi } from "../../API/ApiReq";
+import axios from "axios";
+import NotFound from "../NotFound/NotFound";
 function ResetPassword() {
   const { resetToken } = useParams();
-  // useEffect(() => {
-  //   const decodedToken = jwt_decode(resetToken);
-  //   console.log(decodedToken);
-  // });
-
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [focused, setFocused] = useState(false);
+  const [success, setSuccess] = useState(false);
+  useEffect(() => {
+    const validTokenReset = async () => {
+      const config = {
+        "Content-Type": "application/json",
+      };
+      try {
+        const data = await axios.get(
+          `/api/auth/resetpassword/${resetToken}`,
+          config
+        );
+        setSuccess(true);
+        console.log(data);
+      } catch (error) {
+        console.log(`ini error catch: ${error.response.data.msg}`);
+        setSuccess(false);
+        navigate("*");
+      }
+    };
+    validTokenReset();
+  }, [resetToken, navigate]);
 
   const handleResetPassword = async (e) => {
     e.preventDefault();
 
     try {
-      const { data } = await reqReset(resetToken, { password });
+      const config = {
+        method: "PUT",
+        endpoint: `/resetpassword/${resetToken}`,
+        payload: { password },
+      };
+      const { data } = await getDataApi(config);
       Swal.fire({
         position: "center",
         icon: "success",
@@ -44,7 +66,7 @@ function ResetPassword() {
     setFocused(true);
   };
 
-  return (
+  return success ? (
     <ContainerForm>
       <Form submit={handleResetPassword}>
         <div className="title-reset">
@@ -86,6 +108,8 @@ function ResetPassword() {
         </div>
       </Form>
     </ContainerForm>
+  ) : (
+    <NotFound />
   );
 }
 
