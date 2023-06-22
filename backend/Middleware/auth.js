@@ -17,13 +17,17 @@ export const protect = async (req, res, next) => {
 
   jwt.verify(token, process.env.SECRET_TOKEN, (err, decode) => {
     if (err) res.status(404).json("Not authorized to access this route");
-    const user = decode.id;
-    if (!user) {
-      return res.status(404).json({
-        msg: "Not user found with this id",
-      });
+    try {
+      const user = decode.id;
+      if (!user) {
+        return res.status(404).json({
+          msg: "Not user found with this id",
+        });
+      }
+      req.user = user;
+      next();
+    } catch (error) {
+      console.log(error);
     }
-    req.user = user;
-    next();
   });
 };

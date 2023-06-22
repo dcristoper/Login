@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getDataPrivate } from "../../API/ApiReq";
 import "./Dashboard.scss";
+import ContainerChat from "../../Component/ContainerChat/ContainerChat";
 
 function Private() {
   const [error, setError] = useState("");
@@ -36,7 +37,8 @@ function Private() {
   return (
     <div className="Wrapper-dashboard">
       {error && <span>{error}</span>}
-      <div className="bg-header"> </div>
+      <div className="bg-header"></div>
+      <ContainerChat></ContainerChat>
     </div>
   );
 }
