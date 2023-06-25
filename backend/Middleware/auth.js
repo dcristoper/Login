@@ -15,7 +15,7 @@ export const protect = async (req, res, next) => {
     });
   }
 
-  jwt.verify(token, process.env.SECRET_TOKEN, (err, decode) => {
+  jwt.verify(token, process.env.ACCESS_TOKEN, (err, decode) => {
     if (err) res.status(404).json("Not authorized to access this route");
     try {
       const user = decode.id;

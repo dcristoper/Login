@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import "./Login.scss";
-import ContainerForm from "../../Component/ContainerForm/ContainerForm";
+import ContainerForm from "../../Component/Container/Form/ContainerForm";
 import ShowPassword from "../../Component/showPassword/showPassword";
 import { getDataApi } from "../../API/ApiReq";
 import Form from "../../Component/Form/Form";
@@ -38,11 +38,10 @@ function Login() {
         payload: { email, password },
       };
       const { data } = await getDataApi(config);
-      if (data && data.token) {
-        localStorage.setItem("authToken", data.token);
+      if (data && data.accesstoken) {
+        localStorage.setItem("authToken", data.accesstoken);
         navigate("/");
       }
-      console.log(data);
     } catch (error) {
       navigate("/login");
       Swal.fire({
@@ -58,7 +57,6 @@ function Login() {
     <ContainerForm>
       <Form submit={loginHandler}>
         <Title txt="Login" />
-
         <div className="box-input-login">
           <div className="email-login input-login">
             <input

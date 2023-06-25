@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ContainerForm from "../../Component/ContainerForm/ContainerForm";
+import ContainerForm from "../../Component/Container/Form/ContainerForm";
 import "./ForgotPassword.scss";
 import { getDataApi } from "../../API/ApiReq";
 import Swal from "sweetalert2";

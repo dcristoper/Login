@@ -1,0 +1,25 @@
+.container-contact {
+  margin: 1.5em 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  .box-contact {
+    margin: 0 1em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0.5em;
+    border: 1px solid black;
+
+    .img-contact {
+      display: grid;
+      place-items: center;
+      img {
+        border-radius: 50%;
+        width: 55px;
+        height: 60px;
+        background-size: contain;
+      }
+    }
+  }
+}

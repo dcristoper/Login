@@ -1,14 +1,14 @@
 import mongoose from "mongoose";
 
-const Message = mongoose.Schema(
+const MessageSchema = mongoose.Schema(
   {
-    chatId: {
+    conversationId: {
       type: String,
     },
     senderId: {
       type: String,
     },
-    text: {
+    message: {
       type: String,
     },
   },
@@ -17,5 +17,5 @@ const Message = mongoose.Schema(
   }
 );
 
-const MessageModel = mongoose.model("Message", Message);
-export default MessageModel;
+const Message = mongoose.model("Message", MessageSchema);
+export default Message;

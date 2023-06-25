@@ -2,6 +2,7 @@ import User from "../Models/Users.js";
 import sendEmail from "../Utils/sendEmail.js";
 import { sendError, sendToken } from "../Utils/callBack.js";
 import crypto from "crypto";
+import jwt from "jsonwebtoken";
 
 export const register = async (req, res, next) => {
   const { username, email, password } = req.body;
@@ -25,8 +26,11 @@ export const register = async (req, res, next) => {
       email,
       password,
     });
-
-    sendToken(user, 201, res);
+    await user.save();
+    res.status(200).json({
+      status: true,
+      user,
+    });
   } catch (error) {
     return sendError(error, 500, res);
   }
@@ -108,7 +112,7 @@ export const forgotPassword = async (req, res, next) => {
   }
 };
 
-export const validReset = async (req, res) => {
+export const validReset = async (req, res, next) => {
   const resetPasswordToken = crypto
     .createHash("sha256")
     .update(req.params.resetToken)
@@ -127,7 +131,7 @@ export const validReset = async (req, res) => {
     }
     return res.status(200).json({
       status: true,
-      msg: "You got access to reset password",
+      msg: "Password reset success",
     });
   } catch (error) {
     res.status(404).json({
@@ -136,6 +140,7 @@ export const validReset = async (req, res) => {
     });
   }
 };
+
 export const resetPassword = async (req, res, next) => {
   const resetPasswordToken = crypto
     .createHash("sha256")
@@ -147,17 +152,37 @@ export const resetPassword = async (req, res, next) => {
       resetPasswordToken,
       resetPasswordExpire: { $gt: Date.now() },
     });
-
+    if (!user) {
+      return res.status(400).json({
+        status: false,
+        msg: "Link has expired",
+      });
+    }
     user.password = req.body.password;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;
     await user.save();
-
     res.status(201).json({
       success: true,
       msg: "Password Reset Success",
     });
   } catch (error) {
     return next(error);
+  }
+};
+
+export const refreshToken = async (req, res) => {
+  const { refreshToken } = req.cookies;
+  if (!refreshToken) return res.sendStatus(401);
+  try {
+    const user = await User.findOne({ refreshToken });
+    if (!user) return res.sendStatus(403);
+    jwt.verify(refreshToken, process.env.SECRET_TOKEN, async (err, decoded) => {
+      if (err) return res.sendStatus(403);
+      const accessToken = await user.signedAccessToken();
+      res.json({ accessToken });
+    });
+  } catch (error) {
+    console.log(error);
   }
 };

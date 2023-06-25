@@ -1,4 +1,4 @@
-import ContainerForm from "../../Component/ContainerForm/ContainerForm";
+import ContainerForm from "../../Component/Container/Form/ContainerForm";
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";

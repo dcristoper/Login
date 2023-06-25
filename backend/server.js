@@ -1,9 +1,13 @@
+// ? PACKAGE
 import colors from "colors";
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import cookieParser from "cookie-parser";
+
+// ? CONTROLLERS
 import UserRouter from "./Routes/User.js";
-import ChatRouter from "./Routes/Chat.js";
+import ConversationRouter from "./Routes/Conversation.js";
 import MessageRouter from "./Routes/Message.js";
 import privates from "./Routes/private.js";
 import connectDb from "./Config/ConnectDb.js";
@@ -20,10 +24,11 @@ const Port = process.env.PORT || 5000;
 // ? * Middleware
 // ? ==============================
 app.use(express.json());
+app.use(cookieParser());
 app.use("/api/auth", UserRouter);
 app.use("/api/auth/private", privates);
-app.use("/api/user", ChatRouter);
-app.use("/api/message", MessageRouter);
+app.use("/api", ConversationRouter);
+app.use("/api", MessageRouter);
 app.use(
   cors({
     origin: "http://localhost:3000",

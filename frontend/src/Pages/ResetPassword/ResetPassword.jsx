@@ -1,43 +1,22 @@
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { useNavigate, useParams } from "react-router-dom";
-import ContainerForm from "../../Component/ContainerForm/ContainerForm";
+import ContainerForm from "../../Component/Container/Form/ContainerForm";
+
 import Form from "../../Component/Form/Form";
 import "./ResetPassword.scss";
 import { getDataApi } from "../../API/ApiReq";
-import axios from "axios";
 import NotFound from "../NotFound/NotFound";
+import axios from "axios";
 function ResetPassword() {
   const { resetToken } = useParams();
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [focused, setFocused] = useState(false);
-  const [success, setSuccess] = useState(false);
-  useEffect(() => {
-    const validTokenReset = async () => {
-      const config = {
-        "Content-Type": "application/json",
-      };
-      try {
-        const data = await axios.get(
-          `/api/auth/resetpassword/${resetToken}`,
-          config
-        );
-        setSuccess(true);
-        console.log(data);
-      } catch (error) {
-        console.log(`ini error catch: ${error.response.data.msg}`);
-        setSuccess(false);
-        navigate("*");
-      }
-    };
-    validTokenReset();
-  }, [resetToken, navigate]);
-
+  const [success, setSuccess] = useState(true);
   const handleResetPassword = async (e) => {
     e.preventDefault();
-
     try {
       const config = {
         method: "PUT",
@@ -45,6 +24,9 @@ function ResetPassword() {
         payload: { password },
       };
       const { data } = await getDataApi(config);
+      if (!data.success) {
+        setSuccess(false);
+      }
       Swal.fire({
         position: "center",
         icon: "success",
@@ -61,6 +43,29 @@ function ResetPassword() {
       }).then(() => navigate("/forgotpassword"));
     }
   };
+  useEffect(() => {
+    const validTokenReset = async () => {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      try {
+        const { data } = await axios.get(
+          `/api/auth/resetpassword/${resetToken}`,
+          config
+        );
+        console.log(data);
+        if (!data) {
+          setSuccess(true);
+        }
+      } catch {
+        setSuccess(false);
+        navigate("*");
+      }
+    };
+    validTokenReset();
+  }, [resetToken, navigate]);
 
   const handleFocus = (e) => {
     setFocused(true);
@@ -68,7 +73,7 @@ function ResetPassword() {
 
   return success ? (
     <ContainerForm>
-      <Form submit={handleResetPassword}>
+      <Form submit={(e) => handleResetPassword(e)}>
         <div className="title-reset">
           <h1>Reset Password</h1>
         </div>

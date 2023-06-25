@@ -1,23 +1,34 @@
-import MessageModel from "../Models/Message.js";
-
+import Message from "../Models/Message.js";
+import User from "../Models/Users.js";
 export const addMessage = async (req, res) => {
-  const { chatId, senderId, text } = req.body;
+  const { conversationId, senderId, message } = req.body;
   try {
-    const message = new MessageModel({
-      chatId,
+    const messages = new Message({
+      conversationId,
       senderId,
-      text,
+      message,
     });
-    const result = await message.save();
+    const result = await messages.save();
     res.status(200).json(result);
   } catch (error) {
     res.status(500).json(error);
   }
 };
 export const getMessage = async (req, res) => {
-  const { chatId } = req.params;
+  const { conversationId } = req.params;
   try {
-    const result = await MessageModel.find({ chatId });
+    const messages = await Message.find({ conversationId });
+    const messageUserData = Promise.all(
+      messages.map(async (message) => {
+        const user = await User.findById(message.senderId);
+        const { email, username } = user;
+        return {
+          user: { email, username },
+          message: message.message,
+        };
+      })
+    );
+    const result = await messageUserData;
     res.status(200).json(result);
   } catch (error) {
     res.status(500).json(error);
