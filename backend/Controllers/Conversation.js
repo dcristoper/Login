@@ -14,15 +14,21 @@ export const chats = async (req, res) => {
   }
 };
 export const userChats = async (req, res) => {
-  const userId = req.params.userId;
+  const { userId } = req.params;
   try {
     const chats = await Conversation.find({
       members: { $in: [userId] },
     });
     const conversationData = Promise.all(
       chats.map(async (chat) => {
-        const user = await chat.members.find((el) => el !== userId);
-        return await User.findById(user);
+        const receiverId = await chat.members.find((id) => id !== userId);
+        const userReceiver = await User.findById(receiverId);
+        const { email, username } = userReceiver;
+        const dataUser = {
+          user: { email, username },
+          conversationId: chat.id,
+        };
+        return dataUser;
       })
     );
     const result = await conversationData;

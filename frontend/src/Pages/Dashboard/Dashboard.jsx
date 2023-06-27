@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getDataPrivate } from "../../API/ApiReq";
 import "./Dashboard.scss";
-import ContainerChat from "../../Component/Container/Chat/ContainerChat";
+import MainApp from "../../Component/Container/Chat/MainApp";
 
 function Private() {
   const [error, setError] = useState("");
@@ -19,12 +19,13 @@ function Private() {
           method: "GET",
           endpoint: "/private",
         };
-        if (token && token !== undefined) {
-          return await getDataPrivate(config, token);
+        if (!token) {
+          return navigate("/login");
         }
-        return navigate("/login");
+        return await getDataPrivate(config, token);
       } catch (error) {
         localStorage.removeItem("authToken");
+        localStorage.removeItem("data");
         setError("You are not authorized, please login");
         setTimeout(() => {
           navigate("/login");
@@ -38,7 +39,9 @@ function Private() {
     <div className="Wrapper-dashboard">
       {error && <span>{error}</span>}
       <div className="bg-header"></div>
-      <ContainerChat />
+      <div className="main-app">
+        <MainApp />
+      </div>
     </div>
   );
 }

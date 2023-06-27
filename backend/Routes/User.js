@@ -6,10 +6,12 @@ import {
   resetPassword,
   validReset,
   refreshToken,
+  getUser,
 } from "../Controllers/User.js";
 
 const router = express.Router();
 
+router.route("/user").get(getUser);
 router.route("/register").post(register);
 router.route("/login").post(login);
 router.route("/token").get(refreshToken);

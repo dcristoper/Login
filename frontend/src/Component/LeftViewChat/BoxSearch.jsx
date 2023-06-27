@@ -1,5 +1,3 @@
-import React from "react";
-
 function BoxSearch({ iconSearch, setIconSearch }) {
   return (
     <div className="box-search">

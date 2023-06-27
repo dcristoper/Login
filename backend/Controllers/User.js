@@ -4,7 +4,24 @@ import { sendError, sendToken } from "../Utils/callBack.js";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
 
-export const register = async (req, res, next) => {
+export const getUser = async (req, res) => {
+  try {
+    const users = await User.find();
+    const userData = Promise.all(
+      users.map(async (user) => {
+        const { email, username, _id } = user;
+        const result = { user: { email, username }, userId: _id };
+        return result;
+      })
+    );
+    const dataUser = await userData;
+    res.status(200).json(dataUser);
+  } catch (error) {
+    console.log(`Error getUser`, error);
+  }
+};
+
+export const register = async (req, res) => {
   const { username, email, password } = req.body;
   const findUser = await User.findOne({ email }).select("+password");
 

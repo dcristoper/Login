@@ -2,7 +2,7 @@ import "./Form.scss";
 
 function Form({ children, submit }) {
   return (
-    <form className="form" onSubmit={submit}>
+    <form className="form hahaha" onSubmit={submit}>
       {children}
     </form>
   );

@@ -22,10 +22,11 @@ export const getMessage = async (req, res) => {
       messages.map(async (message) => {
         const user = await User.findById(message.senderId);
         const { email, username } = user;
-        return {
+        const dataUser = {
           user: { email, username },
           message: message.message,
         };
+        return dataUser;
       })
     );
     const result = await messageUserData;

@@ -23,8 +23,8 @@ const Port = process.env.PORT || 5000;
 // ? ==============================
 // ? * Middleware
 // ? ==============================
-app.use(express.json());
 app.use(cookieParser());
+app.use(express.json());
 app.use("/api/auth", UserRouter);
 app.use("/api/auth/private", privates);
 app.use("/api", ConversationRouter);

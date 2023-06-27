@@ -34,15 +34,19 @@ function Login() {
 
     try {
       const config = {
-        endpoint: "/login",
+        endpoint: "login",
         payload: { email, password },
       };
       const { data } = await getDataApi(config);
       if (data && data.accesstoken) {
+        console.log(data.data);
+        const detailUser = JSON.stringify(data.data);
         localStorage.setItem("authToken", data.accesstoken);
+        localStorage.setItem("data", detailUser);
         navigate("/");
       }
     } catch (error) {
+      console.log(error);
       navigate("/login");
       Swal.fire({
         icon: "error",

@@ -14,7 +14,7 @@ export const getDataApi = async (config) => {
   };
 
   try {
-    const url = `/api/auth${endpoint}`;
+    const url = `/api/auth/${endpoint}`;
     return await axios({
       method,
       url,
@@ -23,7 +23,7 @@ export const getDataApi = async (config) => {
       signal: newAbortSignal(5000),
     });
   } catch (error) {
-    console.error(error);
+    console.log(error.response.data);
   }
 };
 
