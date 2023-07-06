@@ -23,25 +23,6 @@ export const getDataApi = async (config) => {
       signal: newAbortSignal(5000),
     });
   } catch (error) {
-    console.log(error.response.data);
-  }
-};
-
-export const getDataPrivate = async (config, token) => {
-  const { method, endpoint } = config;
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`,
-  };
-  try {
-    const url = `/api/auth${endpoint}`;
-    return await axios({
-      method: method,
-      url: url,
-      headers: headers,
-      signal: newAbortSignal(5000),
-    });
-  } catch (error) {
-    console.log(error);
+    throw error;
   }
 };

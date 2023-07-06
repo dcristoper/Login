@@ -1,35 +1,28 @@
 import { useState } from "react";
 import ContainerForm from "../../Component/Container/Form/ContainerForm";
 import "./ForgotPassword.scss";
-import { getDataApi } from "../../API/ApiReq";
 import Swal from "sweetalert2";
 import { Link, useNavigate } from "react-router-dom";
 import Form from "../../Component/Form/Form";
 import Titile from "../../Component/Title/Title";
+import { useDispatch } from "react-redux";
+import { postsUsers } from "../../Utils/Reducer";
 
 function ForgotPassword() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const handleForgot = async (e) => {
     e.preventDefault();
-    try {
-      const config = {
-        endpoint: "/forgotpassword",
-        payload: { email },
-      };
-      const { data } = await getDataApi(config);
-      if (data) {
-        Swal.fire({
-          position: "center",
-          icon: "success",
-          title: "Email Sent",
-          showConfirmButton: false,
-          timer: 2000,
-        }).then(() => navigate("/login"));
-      }
-    } catch (error) {
-      console.log(error);
-      Swal.fire({
+
+    const config = {
+      endpoint: "/forgotpassword",
+      payload: { email },
+    };
+
+    const getStatus = await dispatch(postsUsers(config));
+    if (getStatus?.error) {
+      return Swal.fire({
         position: "center",
         icon: "error",
         iconColor: "rgb(255, 87, 87)",
@@ -42,8 +35,15 @@ function ForgotPassword() {
           setEmail("");
         }
       });
-      console.error(error.response.data);
     }
+
+    Swal.fire({
+      position: "center",
+      icon: "success",
+      title: "Email Sent",
+      showConfirmButton: false,
+      timer: 2000,
+    }).then(() => navigate("/login"));
   };
 
   return (

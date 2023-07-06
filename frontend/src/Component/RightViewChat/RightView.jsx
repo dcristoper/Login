@@ -1,10 +1,14 @@
+import ProfileReceiver from "./ProfileReceiver";
 import "./RightView.scss";
+import Message from "./Message";
+import InputChat from "./InputChat";
+
 function RightView() {
   return (
     <div className="right-view">
-      <div className="profile-receiver"></div>
-      <div className="contain-chat"></div>
-      <div className="box-text-chat"></div>
+      <ProfileReceiver />
+      <Message />
+      <InputChat />
     </div>
   );
 }

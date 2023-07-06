@@ -9,12 +9,16 @@ import { getDataApi } from "../../API/ApiReq";
 import NotFound from "../NotFound/NotFound";
 import axios from "axios";
 function ResetPassword() {
+  // params
   const { resetToken } = useParams();
+  // navigate
   const navigate = useNavigate();
+  // state
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [focused, setFocused] = useState(false);
   const [success, setSuccess] = useState(true);
+
   const handleResetPassword = async (e) => {
     e.preventDefault();
     try {
@@ -55,7 +59,6 @@ function ResetPassword() {
           `/api/auth/resetpassword/${resetToken}`,
           config
         );
-        console.log(data);
         if (!data) {
           setSuccess(true);
         }

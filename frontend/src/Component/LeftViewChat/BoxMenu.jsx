@@ -1,4 +1,18 @@
-function BoxMenu({ handleLogout, imgProfile, setShowNewChatContainer }) {
+import imgProfile from "../../Assets/profilePict.png";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
+function BoxMenu({ setShowNewChatContainer }) {
+  const navigate = useNavigate();
+  const handleLogout = async () => {
+    try {
+      await axios.delete("api/auth/logout");
+      localStorage.clear();
+      navigate("/login");
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
   return (
     <div className="box-menu">
       <div className="img-profile-user">

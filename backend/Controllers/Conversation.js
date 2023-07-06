@@ -25,7 +25,7 @@ export const userChats = async (req, res) => {
         const userReceiver = await User.findById(receiverId);
         const { email, username } = userReceiver;
         const dataUser = {
-          user: { email, username },
+          reciverData: { email, username },
           conversationId: chat.id,
         };
         return dataUser;
@@ -33,16 +33,6 @@ export const userChats = async (req, res) => {
     );
     const result = await conversationData;
     res.status(200).json(result);
-  } catch (error) {
-    res.status(500).json(error);
-  }
-};
-export const findChats = async (req, res) => {
-  try {
-    const chat = await Conversation.find({
-      members: { $all: [req.params.firstId, req.params.secondId] },
-    });
-    res.status(200).json(chat);
   } catch (error) {
     res.status(500).json(error);
   }

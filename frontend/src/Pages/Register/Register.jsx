@@ -4,9 +4,10 @@ import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import "./Register.scss";
 import FormInput from "../../Component/Inputs/FormInput";
-import { getDataApi } from "../../API/ApiReq";
 import Form from "../../Component/Form/Form";
 import Title from "../../Component/Title/Title";
+import { useDispatch } from "react-redux";
+import { postsUsers } from "../../Utils/Reducer";
 
 function Register() {
   const [values, setValues] = useState({
@@ -15,6 +16,8 @@ function Register() {
     password: "",
     confirmPassword: "",
   });
+
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
@@ -44,7 +47,7 @@ function Register() {
       errmsg: "It should be a valid email address!",
       label: "Email",
       pattern:
-        "/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,}(?:.[A-Za-z]{2,})?$/",
+        "[-a-zA-Z0-9~!$%^&amp;*_=+}{'?]+(.[-a-zA-Z0-9~!$%^&amp;*_=+}{'?]+)*@([a-zA-Z0-9_][-a-zA-Z0-9_]*(.[-a-zA-Z0-9_]+)*.([cC][oO][mM]))(:[0-9]{1,5})?",
       required: true,
     },
 
@@ -78,32 +81,23 @@ function Register() {
 
     const { username, email, password } = values;
 
-    try {
-      const config = {
-        endpoint: "/register",
-        payload: { username, email, password },
-      };
-      const { data } = await getDataApi(config);
-      if (!data) {
-        console.log("Failed");
+    const config = {
+      endpoint: "/register",
+      payload: { username, email, password },
+    };
+    await dispatch(postsUsers(config));
+    Swal.fire({
+      position: "center",
+      icon: "success",
+      iconColor: "rgb(3, 43, 113)",
+      title: "You have registered",
+      showConfirmButton: true,
+      confirmButtonText: "Login",
+    }).then((ok) => {
+      if (ok.isConfirmed) {
+        navigate("/login");
       }
-      Swal.fire({
-        position: "center",
-        icon: "success",
-        iconColor: "rgb(3, 43, 113)",
-        title: "You have registered",
-        showConfirmButton: true,
-        confirmButtonText: "Login",
-      })
-        .then((ok) => {
-          if (ok.isConfirmed) {
-            navigate("/login");
-          }
-        })
-        .catch((err) => console.log(err));
-    } catch (e) {
-      console.log(e);
-    }
+    });
   };
 
   const onChange = (e) => {

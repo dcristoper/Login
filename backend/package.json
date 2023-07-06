@@ -5,9 +5,9 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "server": "concurrently \"npm run start-backend\" \"npm run start-frontend\"",
+    "start": "concurrently \"npm run start-backend\" \"npm run start-frontend\"",
     "start-backend": "nodemon server.js",
-    "start-frontend": "cd ../frontend && npm start"
+    "start-frontend": "cd ../frontend && npm run frontend"
   },
   "keywords": [],
   "author": "",

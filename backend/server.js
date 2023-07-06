@@ -31,6 +31,7 @@ app.use("/api", ConversationRouter);
 app.use("/api", MessageRouter);
 app.use(
   cors({
+    credentials: true,
     origin: "http://localhost:3000",
     methods: ["GET", "POST", "PUT"],
   })

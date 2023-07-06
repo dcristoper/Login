@@ -1,13 +1,90 @@
 .right-view {
   display: grid;
   grid-template-rows: 0.25fr 3fr 0.25fr;
+  border-left: 1px solid rgb(148, 148, 148);
+
+  // profile-receiver
   .profile-receiver {
-    // background-color: aqua;
+    display: flex;
+    align-items: center;
+    padding: 0 2em;
+    gap: 20px;
+    .img-profile-receiver {
+      display: flex;
+      align-items: center;
+      img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+    }
   }
-  .contain-chat {
-    // background-color: rgb(92, 19, 156);
+
+  // container-message
+  .container-message {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 2em;
+    .sender-message {
+      align-self: flex-end;
+    }
+    .receiver-message {
+      align-self: flex-start;
+    }
+    .chat {
+      border-radius: 0.5em;
+      font-size: 0.9rem;
+      padding: 10px;
+      margin: 10px;
+      background-color: rgb(231, 231, 231);
+    }
   }
-  .box-text-chat {
-    // background-color: rgb(20, 5, 33);
+  .box-input-chat {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1em;
+    gap: 20px;
+
+    span {
+      cursor: pointer;
+      font-size: 2rem;
+      background-color: initial;
+      padding: 0.2rem 0.2rem;
+      color: rgb(113, 113, 113);
+      border-radius: 0.4rem;
+
+      &:hover {
+        background-color: rgb(215, 215, 215);
+      }
+    }
+
+    .input-chat {
+      width: 80%;
+      padding: 0.5em 0.7em;
+      min-height: 1em;
+      max-height: 7.8em;
+      overflow-y: scroll;
+      outline: none;
+      background-color: white;
+      white-space: pre-wrap;
+      word-break: break-word;
+      border-radius: 0.4em;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      &[placeholder]:empty::after {
+        pointer-events: none;
+        content: attr(placeholder);
+        color: rgb(142, 142, 142);
+      }
+
+      &[placeholder]:empty:focus::after {
+        content: "";
+      }
+    }
   }
 }

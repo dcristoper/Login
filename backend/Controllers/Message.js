@@ -21,9 +21,9 @@ export const getMessage = async (req, res) => {
     const messageUserData = Promise.all(
       messages.map(async (message) => {
         const user = await User.findById(message.senderId);
-        const { email, username } = user;
+        const { email, username, _id } = user;
         const dataUser = {
-          user: { email, username },
+          user: { email, username, _id },
           message: message.message,
         };
         return dataUser;

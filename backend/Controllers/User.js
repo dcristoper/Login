@@ -197,9 +197,26 @@ export const refreshToken = async (req, res) => {
     jwt.verify(refreshToken, process.env.SECRET_TOKEN, async (err, decoded) => {
       if (err) return res.sendStatus(403);
       const accessToken = await user.signedAccessToken();
+
       res.json({ accessToken });
     });
   } catch (error) {
     console.log(error);
   }
+};
+
+export const logOut = async (req, res) => {
+  const { refreshToken } = req.cookies;
+  if (refreshToken) res.status(204);
+  const user = await User.findOne({ refreshToken });
+  if (!user) res.status(204);
+  const { _id } = user;
+  await User.updateOne(
+    { _id },
+    {
+      $set: { refreshToken: null },
+    }
+  );
+  res.clearCookie("refreshToken");
+  return res.sendStatus(200);
 };

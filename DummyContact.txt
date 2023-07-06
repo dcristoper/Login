@@ -28,3 +28,7 @@ const dummycontact = [
       status: true,
     },
   ];
+
+
+
+  mengatur input text pada dashboard

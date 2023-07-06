@@ -16,13 +16,13 @@ export const sendToken = async (user, statusCode, res) => {
       { _id: user._id },
       { $set: { refreshToken: refreshToken } }
     );
+    await user.save();
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
     });
-    const data = {
-      user: { id: _id, email, username },
-    };
+    const data = { id: _id, email, username };
+
     return res.status(statusCode).json({
       success: true,
       data,
